@@ -8,5 +8,6 @@ structure:
       entry: home
     -
       entry: 90289d76-7dd2-4919-877e-faf30c8134d3
-    -
-      entry: de946dc1-bc7c-4c01-90d7-98dc2f34d255
+      children:
+        -
+          entry: de946dc1-bc7c-4c01-90d7-98dc2f34d255
