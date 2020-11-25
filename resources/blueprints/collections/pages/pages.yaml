@@ -1,0 +1,115 @@
+title: Pages
+sections:
+  main:
+    display: Main
+    fields:
+      -
+        handle: title
+        field:
+          type: text
+          required: true
+          validate:
+            - required
+      -
+        handle: content
+        field:
+          type: markdown
+          display: Content
+          localizable: true
+      -
+        handle: author
+        field:
+          type: users
+          display: Author
+          default: current
+          localizable: true
+          max_items: 1
+      -
+        handle: template
+        field:
+          type: template
+          display: Template
+          localizable: true
+      -
+        handle: replicator
+        field:
+          collapse: false
+          sets:
+            new_set:
+              display: 'New Set'
+              fields:
+                -
+                  handle: checkboxes
+                  field:
+                    inline: false
+                    options:
+                      option-1: 'Option 1'
+                      option-2: 'Option 2'
+                      option-3: 'Option 3'
+                    display: Checkboxes
+                    type: checkboxes
+                    icon: checkboxes
+                    listable: hidden
+                -
+                  handle: select
+                  field:
+                    options:
+                      option-1: 'Option 1'
+                      option-2: 'Option 2'
+                      option-3: 'Option 3'
+                    multiple: true
+                    clearable: false
+                    searchable: true
+                    taggable: false
+                    push_tags: false
+                    cast_booleans: false
+                    display: Select
+                    type: select
+                    icon: select
+                    listable: hidden
+                -
+                  handle: taxonomy_terms
+                  field:
+                    max_items: 1
+                    mode: select
+                    taxonomies:
+                      - taxono_me
+                    display: 'Taxonomy Terms'
+                    type: terms
+                    icon: taxonomy
+                    listable: hidden
+          display: Replicator
+          type: replicator
+          icon: replicator
+          listable: hidden
+      -
+        handle: taxonomy_terms
+        field:
+          max_items: 1
+          mode: select
+          taxonomies:
+            - taxono_me
+          display: 'Taxonomy Terms'
+          type: terms
+          icon: taxonomy
+          listable: hidden
+  sidebar:
+    display: Sidebar
+    fields:
+      -
+        handle: slug
+        field:
+          type: slug
+          required: true
+          localizable: true
+          validate:
+            - required
+      -
+        handle: parent
+        field:
+          type: entries
+          collections:
+            - pages
+          max_items: 1
+          listable: false
+          localizable: true

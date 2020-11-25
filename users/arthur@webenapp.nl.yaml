@@ -2,3 +2,10 @@ name: 'Arthur Perton'
 super: true
 id: d376f95c-8efa-47c4-973a-1bf5049871f3
 password_hash: $2y$10$C0LvfuTiszvIWBQIBG2Pq.x7eWLmvftMfGFhepga4Vnk05oErmVXa
+preferences:
+  collections:
+    pages:
+      after_save: continue_editing
+  assets:
+    assets:
+      mode: table
