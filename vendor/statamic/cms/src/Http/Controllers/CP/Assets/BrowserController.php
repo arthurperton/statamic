@@ -4,13 +4,13 @@ namespace Statamic\Http\Controllers\CP\Assets;
 
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\Log;
 use Statamic\Contracts\Assets\AssetContainer as AssetContainerContract;
 use Statamic\Exceptions\AuthorizationException;
+use Statamic\Extensions\Pagination\LengthAwarePaginator;
 use Statamic\Facades\Asset;
 use Statamic\Facades\User;
 use Statamic\Http\Controllers\CP\CpController;
-use Statamic\Http\Resources\CP\Assets\FolderAssetsCollection;
+use Statamic\Http\Resources\CP\Assets\FolderItemsCollection;
 use Statamic\Http\Resources\CP\Assets\SearchedAssetsCollection;
 
 class BrowserController extends CpController
@@ -73,12 +73,14 @@ class BrowserController extends CpController
 
         $folder = $container->assetFolder($path);
 
-        Log::debug("number of subfolders: ".$folder->assetFolders()->count());
-        Log::debug("current page: ".Paginator::resolveCurrentPage());
+        $folders = $request->withFolders ? $folder->assetFolders() : collect();
+        $assets = $folder->queryAssets()->get();
 
-        $assets = $folder->queryAssets()->paginate(30);
-
-        return (new FolderAssetsCollection($assets))->folder($folder);
+        $items = $folders->concat($assets);
+        
+        $items = $this->paginate($items, 30);
+        
+        return (new FolderItemsCollection($items))->folder($folder);
     }
 
     public function search(Request $request, $container)
@@ -92,5 +94,24 @@ class BrowserController extends CpController
         $assets = $query->paginate(30);
 
         return new SearchedAssetsCollection($assets);
+    }
+
+    private function paginate($items, $perPage)
+    {
+        $currentPage = Paginator::resolveCurrentPage();
+        
+        $results = $items->slice(($currentPage - 1) * $perPage, $perPage);
+
+        return $this->paginator($results, $items->count(), $perPage, $currentPage, [
+            'path' => Paginator::resolveCurrentPath(),
+            'pageName' => 'page',
+        ]);
+    }
+
+    private function paginator($items, $total, $perPage, $currentPage, $options)
+    {
+        return app()->makeWith(LengthAwarePaginator::class, compact(
+            'items', 'total', 'perPage', 'currentPage', 'options'
+        ));
     }
 }
