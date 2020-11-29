@@ -54,6 +54,10 @@ abstract class UserRepository implements RepositoryContract
             'groups' => ['type' => 'user_groups', 'width' => 50],
         ])->setHandle('user');
 
+        if ($user) {
+            $blueprint->setParent($user);
+        }
+
         UserBlueprintFound::dispatch($blueprint, $user);
 
         return $blueprint;
