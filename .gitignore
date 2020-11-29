@@ -3,7 +3,12 @@
 /public/storage
 /public/vendor/statamic
 /storage/*.key
-/vendor
+!/vendor
+/vendor/*
+!/vendor/statamic
+/vendor/statmic/*
+!/vendor/statamic/cms
+/vendor/statamic/cms/node_modules
 .env
 .env.backup
 .phpunit.result.cache
